@@ -32,7 +32,7 @@
 
         var fuels = new Dictionary<int, int>();
 
-        for (int i = minDistance; i <= maxDistance; i++)
+        for (var i = minDistance; i <= maxDistance; i++)
         {
             fuels[i] = 0;
         }

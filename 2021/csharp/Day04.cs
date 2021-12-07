@@ -27,11 +27,11 @@
 
         var boards = new List<Board>();
 
-        for (int i = 2; i < inputLines.Length; i += 1 + Board.Size)
+        for (var i = 2; i < inputLines.Length; i += 1 + Board.Size)
         {
             var boardNumbers = new List<int[]>();
 
-            for (int j = 0; j < Board.Size; j++)
+            for (var j = 0; j < Board.Size; j++)
             {
                 var boardRow = inputLines[i + j]
                     .Split(" ", StringSplitOptions.RemoveEmptyEntries)
@@ -88,12 +88,12 @@ class Board
 
     public Board(int[][] boardNumbers)
     {
-        for (int x = 0; x < Size; x++)
+        for (var x = 0; x < Size; x++)
         {
             markedCountX.Add(x, 0);
             markedCountY.Add(x, 0);
 
-            for (int y = 0; y < Size; y++)
+            for (var y = 0; y < Size; y++)
             {
                 numbers.Add(boardNumbers[x][y], (x, y));
             }
