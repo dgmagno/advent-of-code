@@ -11,17 +11,17 @@
         var day = $"{args[0].PadLeft(2, '0')}";
         var part = args[1];
 
-        var challengeType = Type.GetType($"Day{day}") 
+        var puzzleType = Type.GetType($"Day{day}") 
             ?? throw new NullReferenceException();
 
-        var challenge = Activator.CreateInstance(challengeType) as Challenge 
+        var puzzle = Activator.CreateInstance(puzzleType) as Puzzle 
             ?? throw new NullReferenceException();
 
         Action invoke = part switch
         {
-            "1" => () => Console.WriteLine(challenge.Part1()),
-            "2" => () => Console.WriteLine(challenge.Part2()),
-            "assert" => () => challenge.Assert(),
+            "1" => () => Console.WriteLine(puzzle.Part1()),
+            "2" => () => Console.WriteLine(puzzle.Part2()),
+            "assert" => () => puzzle.Assert(),
             _ => throw new NotImplementedException()
         };
 
@@ -29,7 +29,7 @@
     }
 }
 
-abstract class Challenge
+abstract class Puzzle
 {
     protected string[] InputLines => File.ReadAllLines($"{Paths.Inputs}/{Day}.txt");
 

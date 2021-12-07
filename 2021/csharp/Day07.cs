@@ -1,4 +1,4 @@
-﻿class Day07 : Challenge
+﻿class Day07 : Puzzle
 {
     protected override long Part1(string[] inputLines)
     {
