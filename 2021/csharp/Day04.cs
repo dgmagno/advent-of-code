@@ -15,7 +15,7 @@
             }
         }
 
-        throw new Exception("not found");
+        throw new InvalidOperationException("Winning board not found");
     }
 
     private static (int[], Board[]) ParseInput(string[] inputLines)
@@ -71,7 +71,7 @@
             }
         }
 
-        throw new Exception("not found");
+        throw new InvalidOperationException("Winning board not found");
     }
 }
 
