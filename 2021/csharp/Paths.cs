@@ -1,8 +1,8 @@
 ﻿using System.Runtime.CompilerServices;
 
-internal static class Paths
+static class Paths
 {
-    public static string Inputs;
+    public static readonly string Inputs;
 
     static Paths()
     {
