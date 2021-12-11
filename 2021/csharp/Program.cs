@@ -21,7 +21,11 @@
         {
             "1" => () => Console.WriteLine(puzzle.Part1()),
             "2" => () => Console.WriteLine(puzzle.Part2()),
-            "assert" => () => puzzle.Assert(),
+            "assert" => () =>
+            {
+                //Debugger.Launch();
+                puzzle.Assert();
+            },
             _ => throw new NotImplementedException()
         };
 
