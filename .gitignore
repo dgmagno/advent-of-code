@@ -871,3 +871,5 @@ obj/
 # Additional files built by Visual Studio
 
 # End of https://www.toptal.com/developers/gitignore/api/windows,linux,visualstudio,visualstudiocode,osx,xamarinstudio,fsharp,csharp,monodevelop,vim,emacs,node,bower
+
+.data

@@ -2,6 +2,8 @@
 {
     public static void Main(string[] args)
     {
+        args = Load(args);
+        
         if (args.Length != 2)
         {
             Console.WriteLine("Command: dotnet run <day> <part>. Values <day>: 1 - 25, <part>: 1, 2, assert");
@@ -21,15 +23,29 @@
         {
             "1" => () => Console.WriteLine(puzzle.Part1()),
             "2" => () => Console.WriteLine(puzzle.Part2()),
-            "assert" => () =>
-            {
-                //Debugger.Launch();
-                puzzle.Assert();
-            },
+            "assert" => () => puzzle.Assert(),
             _ => throw new NotImplementedException()
         };
 
         invoke();
+    }
+
+    private static string[] Load(string[] args)
+    {
+        var data = File.ReadAllLines(Paths.DataFile);
+
+        if (args.Length != 2)
+        {
+            return data[0].Split(" ");
+        }
+        else
+        {
+            data[0] = string.Join(" ", args);
+
+            File.WriteAllLines(Paths.DataFile, data);
+
+            return args;
+        }
     }
 }
 

@@ -1,22 +1,51 @@
 ﻿class Day10 : Puzzle
 {
-    private static readonly Dictionary<char, int> score = new()
+    protected override long Part1(string[] inputLines)
     {
-        [')'] = 3,
-        [']'] = 57,
-        ['}'] = 1197,
-        ['>'] = 25137,
-    };
+        var score = new Dictionary<char, int>()
+        {
+            [')'] = 3,
+            [']'] = 57,
+            ['}'] = 1197,
+            ['>'] = 25137,
+        };
 
-    private static readonly Dictionary<char, char> closingBrackets = new()
+        return inputLines
+            .Select(it => ChunkFactory.Create(it))
+            .OfType<CorruptedChunk>()
+            .Sum(chunk => score[chunk.CorruptedBracket]);
+    }
+
+    protected override long Part2(string[] inputLines)
     {
-        [')'] = '(',
-        [']'] = '[',
-        ['}'] = '{',
-        ['>'] = '<',
-    };
+        var score = new Dictionary<char, int>()
+        {
+            [')'] = 1,
+            [']'] = 2,
+            ['}'] = 3,
+            ['>'] = 4,
+        };
 
-    private static readonly Dictionary<char, char> openingBrackets = new()
+        var scores = inputLines
+            .Select(it => ChunkFactory.Create(it))
+            .OfType<IncompleteChunk>()
+            .Select(chunk => chunk.MissingBrackets.Aggregate(0L, (acc, it) => (5 * acc) + score[it]))
+            .OrderBy(it => it)
+            .ToArray();
+
+        return scores[scores.Length / 2];
+    }
+}
+
+abstract record Chunk();
+
+record CorruptedChunk(char CorruptedBracket) : Chunk;
+
+record IncompleteChunk(IReadOnlyList<char> MissingBrackets) : Chunk;
+
+class ChunkFactory
+{
+    private static readonly Dictionary<char, char> openingPairs = new()
     {
         ['('] = ')',
         ['['] = ']',
@@ -24,40 +53,41 @@
         ['<'] = '>',
     };
 
-    protected override long Part1(string[] inputLines)
+    public static readonly Dictionary<char, char> closingPairs = new()
     {
-        var result = 0;
+        [')'] = '(',
+        [']'] = '[',
+        ['}'] = '{',
+        ['>'] = '<',
+    };
 
-        foreach (var line in inputLines)
+    public static Chunk Create(string line)
+    {
+        var brackets = new LinkedList<char>();
+
+        for (var i = 0; i < line.Length; i++)
         {
-            var brackets = new LinkedList<char>();
+            var bracket = line[i];
 
-            foreach (var bracket in line)
+            if (openingPairs.ContainsKey(bracket))
             {
-                if (openingBrackets.TryGetValue(bracket, out var closingBracket))
-                {
-                    brackets.AddLast(bracket);
-                }
-                else
-                {
-                    if (closingBrackets[bracket] != brackets.Last())
-                    {
-                        result += score[bracket];
-                        break;
-                    }
-                    else
-                    {
-                        brackets.RemoveLast();
-                    }
-                }
+                brackets.AddLast(bracket);
+            }
+            else if(closingPairs[bracket] != brackets.Last())
+            {
+                return new CorruptedChunk(bracket);
+            }
+            else
+            {
+                brackets.RemoveLast();
             }
         }
 
-        return result;
-    }
+        var missingBrackets = brackets
+            .Select(it => openingPairs[it])
+            .Reverse()
+            .ToArray();
 
-    protected override long Part2(string[] inputLines)
-    {
-        throw new NotImplementedException();
+        return new IncompleteChunk(missingBrackets);
     }
 }
