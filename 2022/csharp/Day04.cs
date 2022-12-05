@@ -9,10 +9,11 @@ class Day04 : Puzzle
 {
     private static readonly Regex regex = new(@"(\d+)-(\d+),(\d+)-(\d+)", RegexOptions.Compiled);
 
-    protected override long Part1(string[] inputLines)
+    protected override string Part1(string[] inputLines)
     {
         return Create(inputLines)
-            .Count(pairs => pairs[0].Contains(pairs[1]) || pairs[1].Contains(pairs[0]));
+            .Count(pairs => pairs[0].Contains(pairs[1]) || pairs[1].Contains(pairs[0]))
+            .ToString();
     }
 
     private static IEnumerable<Pair[]> Create(string[] inputLines)
@@ -26,10 +27,11 @@ class Day04 : Puzzle
             });
     }
 
-    protected override long Part2(string[] inputLines)
+    protected override string Part2(string[] inputLines)
     {
         return Create(inputLines)
-            .Count(pairs => pairs[0].Overlaps(pairs[1]) || pairs[1].Overlaps(pairs[0]));
+            .Count(pairs => pairs[0].Overlaps(pairs[1]) || pairs[1].Overlaps(pairs[0]))
+            .ToString();
     }
 }
 

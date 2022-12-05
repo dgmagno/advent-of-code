@@ -4,19 +4,21 @@ using System.Linq;
 
 class Day03 : Puzzle
 {
-    protected override long Part1(string[] inputLines)
+    protected override string Part1(string[] inputLines)
     {
         return inputLines
             .Select(it => new Rucksack(it))
-            .Sum(it => it.FindSharedItem().Priority);
+            .Sum(it => it.FindSharedItem().Priority)
+            .ToString();
     }
 
-    protected override long Part2(string[] inputLines)
+    protected override string Part2(string[] inputLines)
     {
         return inputLines
             .Select(it => new Rucksack(it))
             .Chunk(3)
-            .Sum(it => Rucksack.FindSharedItem(it).Priority);
+            .Sum(it => Rucksack.FindSharedItem(it).Priority)
+            .ToString();
     }
 }
 
