@@ -13,28 +13,29 @@ class Day05Plus
     {
         var stopWatch = Stopwatch.StartNew();
 
-        var (stacks, stackPointers) = CreateStacks();
+        var (stacks, stackHeadIndexes) = CreateStacks();
 
-        CreateCommands().ForEach(it => DoExecute(it, stacks, stackPointers, reverse));
+        CreateCommands().ForEach(it => DoExecute(it, stacks, stackHeadIndexes, reverse));
 
-        var result = string.Concat(stacks.Select((it, i) => it[stackPointers[i]]));
+        var result = string.Concat(stacks.Select((it, i) => it[stackHeadIndexes[i]]));
 
         Console.WriteLine($"{result}. Elapsed: {stopWatch.Elapsed}");
 
         return result;
     }
 
-    private static void DoExecute(Command command, char[][] stacks, int[] stackPointers, bool reverse)
+    private static void DoExecute(
+        Command command, char[][] stacks, int[] stackHeadIndexes, bool reverse)
     {
         var (count, from, to) = command;
 
         var sliceFrom = stacks[from]
             .AsSpan()
-            .Slice(stackPointers[from] - count + 1, count);
+            .Slice(stackHeadIndexes[from] - count + 1, count);
 
         var sliceTo = stacks[to]
             .AsSpan()
-            .Slice(stackPointers[to] + 1, count);
+            .Slice(stackHeadIndexes[to] + 1, count);
 
         sliceFrom.CopyTo(sliceTo);
 
@@ -43,8 +44,8 @@ class Day05Plus
             sliceTo.Reverse();
         }
 
-        stackPointers[to] += count;
-        stackPointers[from] -= count;
+        stackHeadIndexes[to] += count;
+        stackHeadIndexes[from] -= count;
     }
 
     private static (char[][], int[]) CreateStacks()
@@ -55,12 +56,12 @@ class Day05Plus
             .Count() * 9;
 
         var stacks = new char[9][];
-        var stackPointers = new int[9];
+        var stackHeadIndexes = new int[9];
 
         for (var i = 0; i < stacks.Length; i++)
         {
             stacks[i] = new char[maxSize];
-            stackPointers[i] = -1;
+            stackHeadIndexes[i] = -1;
         }
 
         foreach (var line in File.ReadLines(InputFilePath).TakeWhile(it => it[1] != '1').Reverse())
@@ -71,14 +72,14 @@ class Day05Plus
                 {
                     var id = i / 4;
 
-                    stackPointers[id]++;
+                    stackHeadIndexes[id]++;
 
-                    stacks[id][stackPointers[id]] = line[i];
+                    stacks[id][stackHeadIndexes[id]] = line[i];
                 }
             }
         }
 
-        return (stacks, stackPointers);
+        return (stacks, stackHeadIndexes);
     }
 
     private static List<Command> CreateCommands()
