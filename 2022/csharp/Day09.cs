@@ -31,12 +31,12 @@ enum Direction
     Right = 'R'
 }
 
-record Pos
+record Position
 {
     public int X { get; set; }
     public int Y { get; set; }
 
-    public double Distance(Pos other)
+    public double Distance(Position other)
     {
         return Math.Sqrt(Math.Pow(X - other.X, 2) + Math.Pow(Y - other.Y, 2));
     }
@@ -48,21 +48,21 @@ class Rope
 {
     private static readonly int[] units = { 0, 1, -1 };
 
-    private readonly List<Pos> knots = new();
+    private readonly List<Position> knots = new();
 
-    private Pos Head => knots.First();
-    private Pos Tail => knots.Last();
+    private Position Head => knots.First();
+    private Position Tail => knots.Last();
 
-    private readonly HashSet<Pos> tailsPositions = new()
+    private readonly HashSet<Position> tailsPositions = new()
     {
-        new Pos { X = 0, Y = 0 }
+        new Position { X = 0, Y = 0 }
     };
 
     public Rope(int length = 2)
     {
         for (var i = 0; i < length; i++)
         {
-            knots.Add(new Pos { X = 0, Y = 0 });
+            knots.Add(new Position { X = 0, Y = 0 });
         }
     }
 
@@ -72,7 +72,7 @@ class Rope
         {
             MoveHead(movement.Direction);
 
-            for (int j = 1; j < knots.Count; j++)
+            for (var j = 1; j < knots.Count; j++)
             {
                 MoveKnot(knots[j], knots[j - 1]);
             }
@@ -87,7 +87,7 @@ class Rope
     {
         var tokens = movement.Split(" ");
 
-        return new Movement((Direction)tokens[0][0], int.Parse(tokens[1]));
+        return new Movement(Direction: (Direction)tokens[0][0], Steps: int.Parse(tokens[1]));
     }
 
     private void MoveHead(Direction direction)
@@ -102,7 +102,7 @@ class Rope
         };
     }
 
-    private static void MoveKnot(Pos knot, Pos reference)
+    private static void MoveKnot(Position knot, Position reference)
     {
         if (IsTouching(knot, reference)) return;
 
@@ -121,7 +121,7 @@ class Rope
         }
     }
 
-    private static bool IsTouching(Pos knot, Pos reference)
+    private static bool IsTouching(Position knot, Position reference)
     {
         foreach (var x in units)
         {
