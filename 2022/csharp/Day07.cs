@@ -51,7 +51,7 @@ class FileSystemFactory
                     parent: fileSystem.Current, 
                     name: lineTokens[1]));
             }
-            else if (lineTokens[0] != "dir")
+            else
             {
                 fileSystem.Add(new FileNode(
                     parent: fileSystem.Current, 
